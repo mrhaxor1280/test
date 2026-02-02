@@ -2,9 +2,9 @@ import streamlit as st
 import random
 
 # Page setup
-st.set_page_config(page_title="For Hira 💎", page_icon="💎", layout="centered")
+st.set_page_config(page_title="For Hira 💎", page_icon="💎", layout="wide")
 
-# Beautiful pink background with emojis
+# Beautiful pink gradient background with emojis
 st.markdown("""
 <style>
     .stApp {
@@ -27,60 +27,65 @@ if "no_clicks" not in st.session_state:
 if "answered_yes" not in st.session_state:
     st.session_state.answered_yes = False
 
-# Mixed playful messages (English + Pashto + emojis)
+# Mixed English + Pashto messages
 no_messages = [
     "Are you sure? 😏",
     "Think again 💭",
-    "That doesn’t sound right…",
-    "Your heart says yes ❤️",
-    "Wrong answer 😌",
-    "Don’t break my heart 💔",
     "Makwa spai 🐶",
     "Tasra ba goram lewanai 🤪",
     "Sabar uka za drzam tasra ba goram 😜",
     "Ta bya no select ko 🙈",
-    "Try again 💕",
     "I won’t let you say no 😎",
+    "Try again 💕",
     "You know the answer 😘",
     "C’mon, admit it 💖",
     "Not convinced 😏",
+    "Your heart knows better 💓",
+    "Wrong answer 😌",
+    "Don’t break my heart 💔",
     "I see what you did there 😌",
-    "Your brain says no, heart says yes ❤️",
-    "Nope, that’s wrong 😇",
-    "Try harder 😅",
-    "Your heart knows better 💓"
+    "Your brain says no, heart says yes ❤️"
 ]
 
-# Question
 st.markdown("<h3 style='text-align:center;'>Do you love me?</h3>", unsafe_allow_html=True)
 
 if not st.session_state.answered_yes:
+    # Random vertical spacing before buttons
+    vertical_space_no = random.randint(0, 8)
+    vertical_space_yes = random.randint(0, 8)
 
-    # Yes button always visible at center
-    if st.button("Yes 💖", key="yes_button"):
-        st.session_state.answered_yes = True
-
-    # Vertical "teleport"
-    vertical_space = random.randint(0, 10)
-    for _ in range(vertical_space):
+    for _ in range(vertical_space_no):
         st.write("\n")
 
-    # Horizontal "run away" using random number of columns each click
-    max_cols = 5  # More columns = more horizontal movement
-    random_col_index = random.randint(0, max_cols - 1)
-    cols = st.columns(max_cols)
+    # Horizontal movement using columns
+    max_cols = 5
+    no_col_idx = random.randint(0, max_cols - 1)
+    yes_col_idx = no_col_idx  # Yes starts near No initially
 
-    # No button appears in random column
-    if cols[random_col_index].button("No 😢", key=f"no_button_{st.session_state.no_clicks}"):
+    cols = st.columns(max_cols)
+    # No button
+    if cols[no_col_idx].button("No 😢", key=f"no_button_{st.session_state.no_clicks}"):
         st.session_state.no_clicks += 1
-        # Pick random message
         msg = random.choice(no_messages)
         st.warning(msg)
+        # Move Yes closer to No: random column near No
+        yes_col_idx = max(0, min(max_cols - 1, no_col_idx + random.choice([-1, 0, 1])))
+        # Add vertical spacing for Yes too
+        vertical_space_yes = random.randint(0, 5)
+        for _ in range(vertical_space_yes):
+            st.write("\n")
+        if cols[yes_col_idx].button("Yes 💖", key=f"yes_button_{st.session_state.no_clicks}"):
+            st.session_state.answered_yes = True
+    else:
+        # Show Yes button in random vertical space
+        for _ in range(vertical_space_yes):
+            st.write("\n")
+        if cols[yes_col_idx].button("Yes 💖", key="yes_button"):
+            st.session_state.answered_yes = True
 
 else:
     # End screen
     st.balloons()
     st.success("Thank you ❤️ I knew it! 🥰✨💎")
 
-# Footer
 st.markdown("<p style='text-align:center;color:#555;margin-top:40px;'>Made with love by Fahad Khan 💖💎</p>", unsafe_allow_html=True)
