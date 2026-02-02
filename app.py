@@ -86,6 +86,7 @@ if not st.session_state.answered_yes:
 else:
     # End screen
     st.balloons()
-    st.success("Thank you ❤️ I knew it! 🥰✨💎")
+    st.success("Thank you ❤️ I knew it, I love you too ♥️♥️ 🥰✨💎")
 
 st.markdown("<p style='text-align:center;color:#555;margin-top:40px;'>Made with love by Fahad Khan 💖💎</p>", unsafe_allow_html=True)
+
