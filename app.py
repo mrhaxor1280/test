@@ -51,17 +51,22 @@ st.markdown("<h3 style='text-align:center;'>Do you love me?</h3>", unsafe_allow_
 
 if not st.session_state.answered_yes:
 
-    # Yes button always in center
+    # Yes button fixed at center
     if st.button("Yes 💖", key="yes_button"):
         st.session_state.answered_yes = True
 
-    # Randomly "teleport" No button by adding blank lines
-    teleport_lines = random.randint(0, 12)  # adjust for mobile height
+    # Vertical teleport: random blank lines
+    teleport_lines = random.randint(0, 12)
     for _ in range(teleport_lines):
         st.write("\n")
 
-    # No button
-    if st.button("No 😢", key=f"no_button_{st.session_state.no_clicks}"):
+    # Horizontal teleport: choose random column
+    num_cols = 3  # can increase to 4–5 for more fun
+    cols = st.columns(num_cols)
+    no_col = random.randint(0, num_cols - 1)
+
+    # No button in random column
+    if cols[no_col].button("No 😢", key=f"no_button_{st.session_state.no_clicks}"):
         st.session_state.no_clicks += 1
         msg = random.choice(no_messages)
         st.warning(msg)
